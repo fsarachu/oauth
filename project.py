@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 
 app = Flask(__name__)
@@ -7,7 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///restaurantmenu.db')
+db_path = os.path.join(os.path.dirname(__file__), 'restaurantmenu.db')
+engine = create_engine('sqlite:///{}'.format(db_path))
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
