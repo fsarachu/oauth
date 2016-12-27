@@ -1,3 +1,7 @@
-gapi.auth2.init({
-    client_id: '729655589304-ftob0mqhbbb3hhi2hkuco0m957n8n3v8.apps.googleusercontent.com'
-});
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+}
