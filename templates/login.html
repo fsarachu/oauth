@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id"
-          content="729655589304-ftob0mqhbbb3hhi2hkuco0m957n8n3v8.apps.googleusercontent.com">
-</head>
-<body>
-<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-<a href="#" onclick="signOut();">Sign out</a>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<script src="/static/script.js"></script>
-</body>
-</html>
+{% extends "main.html" %}
+
+{% block content %}
+    {% include "header.html" %}
+    <div class="row">
+        <h1 class="col-xs-12 text-center">Log In</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <a class="btn btn-lg btn-social btn-google">
+                <span class="fa fa-google"></span> Sign in with Google
+            </a>
+        </div>
+    </div>
+{% endblock %}
