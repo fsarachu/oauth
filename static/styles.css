@@ -59,7 +59,7 @@ a {
     padding: 0;
 }
 
-.btn {
+.btn-custom {
     padding: 20px;
     margin: 0;
     border-color: #9FB80A;
@@ -67,16 +67,16 @@ a {
     color: #9FB80A;;
 }
 
-.btn:hover {
+.btn-custom:hover {
     border-color: #9FB80A;
 }
 
-.btn.delete {
+.btn-custom.delete {
     border-color: #aaaaaa;
     color: #aaaaaa;
 }
 
-.btn.delete:hover {
+.btn-custom.delete:hover {
     border-color: #aaaaaa;
     color: red;
 }
