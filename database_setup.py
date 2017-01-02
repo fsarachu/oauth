@@ -15,6 +15,17 @@ class User(Base):
     picture = Column(String(2083))
     google_id = Column(String(254))
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'picture': self.picture,
+            'google_id': self.google_id
+        }
+
 
 class Restaurant(Base):
     __tablename__ = 'restaurant'
