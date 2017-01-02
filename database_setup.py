@@ -25,6 +25,15 @@ class User(Base):
         }
 
 
+class UserProvider(Base):
+    __tablename__ = 'user'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    provider = Column(String(254), nullable=False)
+    provider_uid = Column(String(254), nullable=False)
+
+
 class Restaurant(Base):
     __tablename__ = 'restaurant'
 
