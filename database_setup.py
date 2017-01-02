@@ -6,6 +6,16 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    email = Column(String(254), nullable=False)
+    picture = Column(String(2083), nullable=False)
+    social_id = Column(String(254), nullable=False)
+
+
 class Restaurant(Base):
     __tablename__ = 'restaurant'
 
@@ -44,6 +54,6 @@ class MenuItem(Base):
         }
 
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///restaurant_menu_with_users.db')
 
 Base.metadata.create_all(engine)
