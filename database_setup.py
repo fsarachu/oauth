@@ -12,8 +12,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
     email = Column(String(254), nullable=False)
-    picture = Column(String(2083), nullable=False)
-    social_id = Column(String(254), nullable=False)
+    picture = Column(String(2083))
+    google_id = Column(String(254))
 
 
 class Restaurant(Base):
