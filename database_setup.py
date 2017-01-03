@@ -26,12 +26,14 @@ class User(Base):
 
 
 class UserProvider(Base):
+    """Represents each social login for a local user"""
     __tablename__ = 'user'
-    
+
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
     provider = Column(String(254), nullable=False)
     provider_uid = Column(String(254), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
 
 class Restaurant(Base):
