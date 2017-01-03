@@ -7,8 +7,8 @@ from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 
-from flask import session as login_session
-import random, string
+# from flask import session as login_session
+# import random, string
 
 # Connect to Database and create database session
 db_path = os.path.join(os.path.dirname(__file__), 'restaurantmenu.db')
