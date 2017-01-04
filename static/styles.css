@@ -66,8 +66,7 @@ a {
 .btn-custom {
     padding: 20px;
     margin: 0;
-    border-color: #9FB80A;
-    border-width: 2px;
+    border: 2px #9FB80A;
     color: #9FB80A;;
 }
 
@@ -121,9 +120,7 @@ a {
 
 .banner.main {
     height: 150px;
-    background: url("/static/top-banner.jpg");
-    background-position: right;
-    background-repeat: no-repeat;
+    background: url("/static/top-banner.jpg") no-repeat right;
     background-size: cover;
 }
 
@@ -154,8 +151,7 @@ a {
 .menu-item {
     background: #F0F0F0;
     padding: 20px;
-    margin: 20px;
-    margin-left: -20px;
+    margin: 20px 20px 20px -20px;
 }
 
 .menu-price {
