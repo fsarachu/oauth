@@ -59,6 +59,10 @@ a {
     padding: 0;
 }
 
+.btn {
+    transition: background .2s ease;
+}
+
 .btn-custom {
     padding: 20px;
     margin: 0;
