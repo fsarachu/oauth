@@ -2,8 +2,10 @@ import os
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem
+
 from oauth2client import client
+
+from database_setup import Base, Restaurant, MenuItem
 
 app = Flask(__name__)
 
@@ -37,11 +39,11 @@ def google_callback():
 
     if not auth_code:
         flash("Couldn't log in")
-        return redirect(url_for(show_login))
+        return redirect(url_for('show_login'))
     else:
         credentials = flow.step2_exchange(auth_code)
-        print credentials
-        return redirect(url_for(showRestaurants))
+        print credentials.access_token
+        return redirect(url_for('showRestaurants'))
 
 
 # JSON APIs to view Restaurant Information
