@@ -20,7 +20,7 @@ session = DBSession()
 
 flow = client.flow_from_clientsecrets('client_secrets.json',
                                       scope="profile email",
-                                      redirect_uri="http://localhost:5000/login/google_callback")
+                                      redirect_uri="http://localhost:5000/auth/google")
 
 
 @app.route('/login')
@@ -29,6 +29,11 @@ def show_login():
     # login_session['state'] = state
     # return 'The current session state is {}'.format(login_session['state'])
     return render_template("login.html", google_auth_url=flow.step1_get_authorize_url())
+
+
+@app.route('/auth/google')
+def google_callback():
+    pass
 
 
 # JSON APIs to view Restaurant Information
