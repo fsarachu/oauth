@@ -33,7 +33,15 @@ def show_login():
 
 @app.route('/auth/google')
 def google_callback():
-    pass
+    auth_code = request.args.get('code')
+
+    if not auth_code:
+        flash("Couldn't log in")
+        return redirect(url_for(show_login))
+    else:
+        credentials = flow.step2_exchange(auth_code)
+        print credentials
+        return redirect(url_for(showRestaurants))
 
 
 # JSON APIs to view Restaurant Information
