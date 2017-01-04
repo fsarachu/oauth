@@ -1,11 +1,10 @@
 import os
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
-
-app = Flask(__name__)
-
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
+
+app = Flask(__name__)
 
 # from flask import session as login_session
 # import random, string
