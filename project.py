@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for, f
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
+from oauth2client import client
 
 app = Flask(__name__)
 
@@ -10,12 +11,16 @@ app = Flask(__name__)
 # import random, string
 
 # Connect to Database and create database session
-db_path = os.path.join(os.path.dirname(__file__), 'restaurantmenu.db')
+db_path = os.path.join(os.path.dirname(__file__), 'restaurant_menu_with_users.db')
 engine = create_engine('sqlite:///{}'.format(db_path))
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+flow = client.flow_from_clientsecrets('client_secrets.json',
+                                      scope="profile email",
+                                      redirect_uri="http://localhost:5000/login/google_callback")
 
 
 @app.route('/login')
@@ -23,7 +28,7 @@ def show_login():
     # state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     # login_session['state'] = state
     # return 'The current session state is {}'.format(login_session['state'])
-    return render_template("login.html")
+    return render_template("login.html", google_auth_url=flow.step1_get_authorize_url())
 
 
 # JSON APIs to view Restaurant Information
