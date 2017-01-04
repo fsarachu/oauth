@@ -27,7 +27,7 @@ class User(Base):
 
 class UserProvider(Base):
     """Represents each social login for a local user"""
-    __tablename__ = 'user'
+    __tablename__ = 'user_provider'
 
     id = Column(Integer, primary_key=True)
     provider = Column(String(254), nullable=False)
