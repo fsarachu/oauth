@@ -5,6 +5,23 @@
     <div class="row">
         <h1 class="col-xs-12 text-center">Log In</h1>
     </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-danger">
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="row">
         <div class="col-xs-12 text-center">
             <a href="{{ google_auth_url }}" class="btn btn-social btn-google">
