@@ -34,7 +34,7 @@ def show_login():
     # state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     # login_session['state'] = state
     # return 'The current session state is {}'.format(login_session['state'])
-    return render_template("login.html", google_auth_url=flow.step1_get_authorize_url())
+    return render_template("login.html")
 
 
 @app.route('/auth/google')
