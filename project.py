@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask_login import LoginManager
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
@@ -8,6 +9,9 @@ from oauth2client import client
 from database_setup import Base, Restaurant, MenuItem
 
 app = Flask(__name__)
+login_manager = LoginManager()
+
+login_manager.init_app(app)
 
 # from flask import session as login_session
 # import random, string
