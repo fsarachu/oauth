@@ -2,9 +2,6 @@
 
 {% block content %}
     {% include "header.html" %}
-    <div class="row">
-        <h1 class="col-xs-12 text-center">Log In</h1>
-    </div>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -21,6 +18,10 @@
             </div>
         {% endif %}
     {% endwith %}
+
+    <div class="row">
+        <h1 class="col-xs-12 text-center">Log In</h1>
+    </div>
 
     <div class="row">
         <div class="col-xs-12 text-center">
