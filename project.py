@@ -1,9 +1,11 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
-from flask_login import LoginManager
+import random
+import string
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask_login import LoginManager
 from oauth2client import client
 
 from database_setup import Base, Restaurant, MenuItem
@@ -13,9 +15,6 @@ login_manager = LoginManager()
 
 login_manager.init_app(app)
 
-# from flask import session as login_session
-# import random, string
-
 # Connect to Database and create database session
 db_path = os.path.join(os.path.dirname(__file__), 'restaurant_menu_with_users.db')
 engine = create_engine('sqlite:///{}'.format(db_path))
@@ -24,30 +23,19 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-flow = client.flow_from_clientsecrets('client_secrets.json',
-                                      scope="profile email",
-                                      redirect_uri="http://localhost:5000/auth/google")
+
+def generate_csrf_token():
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 
 
 @app.route('/login')
 def show_login():
-    # state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-    # login_session['state'] = state
-    # return 'The current session state is {}'.format(login_session['state'])
     return render_template("login.html")
 
 
 @app.route('/auth/google')
 def google_callback():
-    auth_code = request.args.get('code')
-
-    if not auth_code:
-        flash("Couldn't log in")
-        return redirect(url_for('show_login'))
-    else:
-        credentials = flow.step2_exchange(auth_code)
-        print credentials.access_token
-        return redirect(url_for('showRestaurants'))
+    pass
 
 
 # JSON APIs to view Restaurant Information
