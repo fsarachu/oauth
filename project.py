@@ -24,7 +24,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-def generate_csrf_token():
+def csrf_token():
     """Assigns a new token to session state and returns it"""
     token = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = token
