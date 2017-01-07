@@ -5,8 +5,8 @@ from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import session as login_session
 from flask_login import LoginManager
-from oauth2client import client
 
 from database_setup import Base, Restaurant, MenuItem
 
@@ -25,7 +25,10 @@ session = DBSession()
 
 
 def generate_csrf_token():
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    """Assigns a new token to session state and returns it"""
+    token = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = token
+    return token
 
 
 @app.route('/login')
