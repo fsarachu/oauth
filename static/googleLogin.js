@@ -16,10 +16,10 @@ $(function () {
             // Send the code to the server
             $.ajax({
                 type: "POST",
-                url: "http://localhost:5000/auth/google?state={{STATE}}",
+                url: "http://localhost:5000/auth/google?state=" + state,
                 contentType: "application/octet-stream; charset=utf-8",
                 success: function (result) {
-                    if(result) {
+                    if (result) {
                         $("#result").html("Login Successful!<br>" + result + "<br> Redirecting...");
                         setTimeout(function () {
                             window.Location.href = "/restaurant";

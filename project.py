@@ -4,10 +4,14 @@ import string
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, make_response
 from flask import session as login_session
 from flask_login import LoginManager
-
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import json
+import requests
 from database_setup import Base, Restaurant, MenuItem
 
 app = Flask(__name__)
@@ -33,7 +37,7 @@ def csrf_token():
 
 @app.route('/login')
 def show_login():
-    return render_template("login.html")
+    return render_template("login.html", state=csrf_token())
 
 
 @app.route('/auth/google')

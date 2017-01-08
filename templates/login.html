@@ -34,6 +34,9 @@
 {% endblock %}
 
 {% block page_scripts %}
+    <script>
+        var state = "{{ state }}";
+    </script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="{{ url_for('static', filename='googleLogin.js') }}"></script>
 {% endblock %}
