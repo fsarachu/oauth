@@ -104,6 +104,13 @@ def google_callback():
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
+    login_session['username'] = data['name']
+    login_session['picture'] = data['picture']
+    login_session['email'] = data['email']
+
+    flash('Logged in as {}'.format(login_session['username']))
+    return redirect(url_for('showRestaurants'))
+
 
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
