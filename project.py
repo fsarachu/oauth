@@ -40,9 +40,69 @@ def show_login():
     return render_template("login.html", state=csrf_token())
 
 
-@app.route('/auth/google')
+@app.route('/auth/google', methods=['POST'])
 def google_callback():
-    pass
+    # Check CSRF token
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter value!'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Get authorization code
+    code = request.data
+
+    # Try to upgrade from the authorization code to an access token
+    try:
+        oauth_flow = flow_from_clientsecrets('client_secrets.json')
+        oauth_flow.redirect_uri = 'postmessage'
+        credentials = oauth_flow.step2_exchange(code)
+    except FlowExchangeError:
+        response = make_response(json.dumps('Failed to exchange tokens!'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Check that the access token is valid
+    access_token = credentials.access_token
+    url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={}'.format(access_token)
+    h = httplib2.Http()
+    result = json.loads(h.request(url, 'GET')[1])
+
+    # If tokeninfo has an error, abort
+    if result.get('error') is not None:
+        response = make_response(json.dumps(result.get('error')), 500)
+        response.headers['Content-Type'] = 'application/json'
+
+    # Verify that the token is for the intended user
+    gplus_id = credentials.id_token['sub']
+    if result['user_id'] != gplus_id:
+        response = make_response(json.dumps('Token\'s user id doesn\'t match given user id'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Verify that the token is valid for this app
+    CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+    if result['issued_to'] != CLIENT_ID:
+        response = make_response(json.dumps('Token\'s client id doesn\'t match app\'s'), 401)
+        print 'Token\'s client id doesn\'t match app\'s'
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Check to see if user is already logged in
+    stored_credentials = login_session.get('credentials')
+    stored_gplus_id = login_session.get('gplus_id')
+    if stored_credentials is not None and stored_gplus_id == gplus_id:
+        response = make_response(json.dumps('Current user is already logged in', 200))
+        response.headers['Content-Type'] = 'application/json'
+
+    # Store credentials for later use
+    login_session['credentials'] = credentials
+    login_session['gplus_id'] = gplus_id
+
+    # Get user info
+    userinfo_url = 'https://www.googleapis.com/oauth2/v2/userinfo'
+    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    answer = requests.get(userinfo_url, params=params)
+    data = json.loads(answer.text)
 
 
 # JSON APIs to view Restaurant Information
