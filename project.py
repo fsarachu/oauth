@@ -95,7 +95,7 @@ def google_callback():
         response.headers['Content-Type'] = 'application/json'
 
     # Store credentials for later use
-    login_session['credentials'] = credentials
+    login_session['credentials'] = credentials.to_json()
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -109,7 +109,7 @@ def google_callback():
     login_session['email'] = data['email']
 
     flash('Logged in as {}'.format(login_session['username']))
-    return redirect(url_for('showRestaurants'))
+    return '<h1>Welcome {}</h1>'.format(login_session['username'])
 
 
 # JSON APIs to view Restaurant Information
