@@ -22,8 +22,8 @@ $(function () {
                     if (result) {
                         $("#result").html("Login Successful!<br>" + result + "<br> Redirecting...");
                         setTimeout(function () {
-                            window.Location.href = "/restaurant";
-                        }, 3000);
+                            window.location.replace("http://localhost:5000/");
+                        }, 1000);
                     } else if (authResult["error"]) {
                         console.log("Ooooooops! Something went wrong: " + authResult["error"]);
                     } else {
