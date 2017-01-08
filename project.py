@@ -53,7 +53,7 @@ def google_callback():
 
     # Try to upgrade from the authorization code to an access token
     try:
-        oauth_flow = flow_from_clientsecrets('client_secrets.json')
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -63,7 +63,7 @@ def google_callback():
 
     # Check that the access token is valid
     access_token = credentials.access_token
-    url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={}'.format(access_token)
+    url = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'.format(access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
@@ -80,8 +80,8 @@ def google_callback():
         return response
 
     # Verify that the token is valid for this app
-    CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
-    if result['issued_to'] != CLIENT_ID:
+    client_id = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+    if result['issued_to'] != client_id:
         response = make_response(json.dumps('Token\'s client id doesn\'t match app\'s'), 401)
         print 'Token\'s client id doesn\'t match app\'s'
         response.headers['Content-Type'] = 'application/json'
