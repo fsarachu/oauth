@@ -16,7 +16,7 @@ $(function () {
             // Send the code to the server
             $.ajax({
                 type: "POST",
-                url: "http://localhost:5000/auth/google?state=" + state,
+                url: "http://localhost:5000/auth/google?state=a" + state,
                 contentType: "application/octet-stream; charset=utf-8",
                 processData: false,
                 data: authResult['code']
@@ -36,6 +36,12 @@ $(function () {
                         } else {
                             $result.addClass("alert-danger").text("Failed to make a server-side call.");
                         }
+                    }
+                )
+                .fail(function (result) {
+                        var $result = $("#result");
+                        $result.removeClass("hidden");
+                        $result.addClass("alert-danger").text("Failed to log in!");
                     }
                 );
         } else {
