@@ -16,7 +16,7 @@ $(function () {
             // Send the code to the server
             $.ajax({
                 type: "POST",
-                url: "http://localhost:5000/auth/google?state=a" + state,
+                url: "http://localhost:5000/auth/google?state=" + state,
                 contentType: "application/octet-stream; charset=utf-8",
                 processData: false,
                 data: authResult['code']
