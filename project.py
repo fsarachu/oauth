@@ -109,7 +109,11 @@ def google_callback():
     login_session['email'] = data['email']
 
     flash('Logged in as {}'.format(login_session['username']))
-    return '<h1>Welcome {}</h1>'.format(login_session['username'])
+
+    response = make_response(json.dumps('Welcome {}'.format(login_session['username']), 200))
+    response.headers['Content-Type'] = 'application/json'
+
+    return response
 
 
 # JSON APIs to view Restaurant Information
