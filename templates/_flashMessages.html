@@ -14,6 +14,22 @@
     {% endif %}
 {% endwith %}
 
+{% with warnings = get_flashed_messages(category_filter=["warning"]) %}
+    {% if warnings %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-warning text-center">
+                    <ul>
+                        {% for msg in warnings %}
+                            <li>{{ msg }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
 {% with successes = get_flashed_messages(category_filter=["success"]) %}
     {% if successes %}
         <div class="row">
@@ -21,6 +37,22 @@
                 <div class="alert alert-success text-center">
                     <ul>
                         {% for msg in successes %}
+                            <li>{{ msg }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% with infos = get_flashed_messages(category_filter=["info"]) %}
+    {% if infos %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-info text-center">
+                    <ul>
+                        {% for msg in infos %}
                             <li>{{ msg }}</li>
                         {% endfor %}
                     </ul>
