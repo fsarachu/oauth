@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% block content %}
+    {% include "header.html" %}
+    <div class="row top-menu">
+        <div class="col-md-10"></div>
+        <div class="col-md-2 text-right">
+        </div>
+    </div>
+    <div class="row divider blue">
+        <div class="col-md-12"></div>
+    </div>
+    <div class="row banner main">
+        <div class="col-md-1"></div>
+        <div class="col-md-11 padding-none">
+            <h1>Restaurants</h1>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class='flash'>
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% for restaurant in restaurants %}
+        <a href="{{ url_for('showMenu', restaurant_id = restaurant.id) }}">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 restaurant-list">
+                    <h3>{{ restaurant.name }}</h3>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </a>
+    {% endfor %}
+{% endblock %}
