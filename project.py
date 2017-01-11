@@ -1,3 +1,4 @@
+# TODO: Restrict CRUD access to only creators of the restaurant
 import json
 import os
 import random
