@@ -48,10 +48,10 @@ def get_user_info(user_id):
 
 
 def get_user_id(email):
-    try:
-        user = session.query(User).filter_by(email=email).one()
+    user = session.query(User).filter_by(email=email).first()
+    if user:
         return user.id
-    except:
+    else:
         return None
 
 
