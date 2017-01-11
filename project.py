@@ -120,9 +120,18 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
+    # Store user info
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+
+    # Check if user already exists
+    user_id = get_user_id(login_session['email'])
+    if not user_id:
+        user_id = create_user(login_session)
+
+    # Store user id
+    login_session['user_id'] = user_id
 
     flash('Logged in as {}'.format(login_session['username']))
 
