@@ -39,12 +39,12 @@ def create_user(login_session):
     new_user = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
     session.add(new_user)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).first()
     return user.id
 
 
 def get_user_info(user_id):
-    return session.query(User).filter_by(id=user_id).one()
+    return session.query(User).filter_by(id=user_id).first()
 
 
 def get_user_id(email):
