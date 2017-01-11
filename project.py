@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, make_response
 from flask import session as login_session
-from flask_login import LoginManager
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -15,9 +14,6 @@ import requests
 from database_setup import Base, Restaurant, MenuItem, User
 
 app = Flask(__name__)
-login_manager = LoginManager()
-
-login_manager.init_app(app)
 
 # Connect to Database and create database session
 db_path = os.path.join(os.path.dirname(__file__), 'restaurant_menu_with_users.db')
@@ -144,19 +140,20 @@ def gconnect():
 @app.route('/gdisconnect')
 def gdisconnect():
     # Check if user is connected
-    credentials = login_session.get('credentials')
-    if credentials is None:
+    if not login_session.get('credentials'):
         response = make_response(json.dumps('User is not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    credentials = json.loads(login_session.get('credentials'))
+
     # Revoke current token
-    access_token = credentials.access_token
+    access_token = credentials['access_token']
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
-    if result['status'] == 200:
+    if result['status'] == '200':
         # Destroy user session
         del login_session['credentials']
         del login_session['username']
