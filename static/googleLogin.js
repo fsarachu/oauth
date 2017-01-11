@@ -27,10 +27,8 @@ $(function () {
                         $result.removeClass("hidden");
 
                         if (result) {
-                            $result.addClass("alert-success").text("Login Successful! Redirecting...");
-                            setTimeout(function () {
-                                window.location.replace("http://localhost:5000/");
-                            }, 3000);
+                            // $result.addClass("alert-success").text("Login Successful! Redirecting...");
+                            window.location.replace("http://localhost:5000/");
                         } else if (authResult["error"]) {
                             $result.addClass("alert-danger").text("Ooooooops! Something went wrong: " + authResult["error"]);
                         } else {
