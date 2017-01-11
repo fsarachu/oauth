@@ -44,8 +44,7 @@ def create_user(login_session):
 
 
 def get_user_info(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
-    return user
+    return session.query(User).filter_by(id=user_id).one()
 
 
 @app.route('/login')
