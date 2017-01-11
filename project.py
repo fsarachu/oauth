@@ -40,7 +40,7 @@ def show_login():
     return render_template("login.html", state=csrf_token())
 
 
-@app.route('/auth/google', methods=['POST'])
+@app.route('/gconnect', methods=['POST'])
 def google_callback():
     # Check CSRF token
     if request.args.get('state') != login_session['state']:
