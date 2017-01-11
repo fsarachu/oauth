@@ -47,6 +47,14 @@ def get_user_info(user_id):
     return session.query(User).filter_by(id=user_id).one()
 
 
+def get_user_id(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+
 @app.route('/login')
 def show_login():
     return render_template("login.html", state=csrf_token())
