@@ -1,6 +1,5 @@
-{% extends "main.html" %}
+{% extends "_main.html" %}
 {% block content %}
-    {% include "header.html" %}
     <div class="row top-menu">
         <div class="col-md-10"></div>
         <div class="col-md-2 text-right">
@@ -15,38 +14,6 @@
             <h1>Restaurants</h1>
         </div>
     </div>
-
-    {% with errors = get_flashed_messages(category_filter=["error"]) %}
-        {% if errors %}
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="alert alert-danger text-center">
-                        <ul>
-                            {% for msg in errors %}
-                                <li>{{ msg }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endwith %}
-
-    {% with successes = get_flashed_messages(category_filter=["success"]) %}
-        {% if successes %}
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="alert alert-success text-center">
-                        <ul>
-                            {% for msg in successes %}
-                                <li>{{ msg }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endwith %}
 
     {% for restaurant in restaurants %}
         <a href="{{ url_for('showMenu', restaurant_id = restaurant.id) }}">
