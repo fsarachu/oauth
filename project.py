@@ -43,6 +43,11 @@ def create_user(login_session):
     return user.id
 
 
+def get_user_info(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
 @app.route('/login')
 def show_login():
     return render_template("login.html", state=csrf_token())
