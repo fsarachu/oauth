@@ -48,9 +48,13 @@ def get_user_id(email):
     return user.id if user else None
 
 
+def is_logged_in():
+    return True if login_session.get('user_id') else False
+
+
 @app.route('/login')
 def show_login():
-    return render_template("login.html", state=csrf_token())
+    return render_template("login.html", state=csrf_token(), logged_in=is_logged_in())
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -194,9 +198,11 @@ def showRestaurants():
     restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
 
     if login_session.get('user_id'):
-        return render_template('restaurants.html', restaurants=restaurants)
+        return render_template('restaurants.html', restaurants=restaurants,
+                               logged_in=is_logged_in())
     else:
-        return render_template('publicRestaurants.html', restaurants=restaurants)
+        return render_template('publicRestaurants.html', restaurants=restaurants,
+                               logged_in=is_logged_in())
 
 
 # Create a new restaurant
@@ -211,7 +217,7 @@ def newRestaurant():
         session.commit()
         return redirect(url_for('showRestaurants'))
     else:
-        return render_template('newRestaurant.html')
+        return render_template('newRestaurant.html', logged_in=is_logged_in())
 
 
 # Edit a restaurant
@@ -226,7 +232,8 @@ def editRestaurant(restaurant_id):
             flash('Restaurant Successfully Edited {}'.format(editedRestaurant.name), category='success')
             return redirect(url_for('showRestaurants'))
     else:
-        return render_template('editRestaurant.html', restaurant=editedRestaurant)
+        return render_template('editRestaurant.html', restaurant=editedRestaurant,
+                               logged_in=is_logged_in())
 
 
 # Delete a restaurant
@@ -241,7 +248,8 @@ def deleteRestaurant(restaurant_id):
         session.commit()
         return redirect(url_for('showRestaurants', restaurant_id=restaurant_id))
     else:
-        return render_template('deleteRestaurant.html', restaurant=restaurantToDelete)
+        return render_template('deleteRestaurant.html', restaurant=restaurantToDelete,
+                               logged_in=is_logged_in())
 
 
 # Show a restaurant menu
@@ -250,7 +258,8 @@ def deleteRestaurant(restaurant_id):
 def showMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
-    return render_template('menu.html', items=items, restaurant=restaurant)
+    return render_template('menu.html', items=items, restaurant=restaurant,
+                           logged_in=is_logged_in())
 
 
 # Create a new menu item
@@ -268,7 +277,8 @@ def newMenuItem(restaurant_id):
         flash('New Menu {} Item Successfully Created'.format(newItem.name), category='success')
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
-        return render_template('newmenuitem.html', restaurant_id=restaurant_id)
+        return render_template('newmenuitem.html', restaurant_id=restaurant_id,
+                               logged_in=is_logged_in())
 
 
 # Edit a menu item
@@ -292,7 +302,8 @@ def editMenuItem(restaurant_id, menu_id):
         flash('Menu Item Successfully Edited', category='success')
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
-        return render_template('editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem)
+        return render_template('editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem,
+                               logged_in=is_logged_in())
 
 
 # Delete a menu item
@@ -308,7 +319,8 @@ def deleteMenuItem(restaurant_id, menu_id):
         flash('Menu Item Successfully Deleted', category='success')
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
-        return render_template('deleteMenuItem.html', item=itemToDelete)
+        return render_template('deleteMenuItem.html', item=itemToDelete,
+                               logged_in=is_logged_in())
 
 
 if __name__ == '__main__':
