@@ -141,9 +141,8 @@ def gconnect():
 def gdisconnect():
     # Check if user is connected
     if not login_session.get('credentials'):
-        response = make_response(json.dumps('User is not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('User is not connected.', category='error')
+        return redirect('/')
 
     credentials = json.loads(login_session.get('credentials'))
 
@@ -161,14 +160,11 @@ def gdisconnect():
         del login_session['gplus_id']
         del login_session['picture']
         del login_session['email']
-
-        response = make_response(json.dumps('Successfully disconnected'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Succcessfully disconnected', category='success')
+        return redirect('/')
     else:
-        response = make_response(json.dumps('Failed to revoke token'), 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Failed to revoke token', category='error')
+        return redirect('/')
 
 
 # JSON APIs to view Restaurant Information
