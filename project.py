@@ -196,7 +196,11 @@ def restaurantsJSON():
 @app.route('/restaurant/')
 def showRestaurants():
     restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
-    return render_template('restaurants.html', restaurants=restaurants)
+
+    if login_session.get('user_id'):
+        return render_template('restaurants.html', restaurants=restaurants)
+    else:
+        return render_template('publicRestaurants.html', restaurants=restaurants)
 
 
 # Create a new restaurant
