@@ -12,7 +12,7 @@ from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 import requests
-from database_setup import Base, Restaurant, MenuItem
+from database_setup import Base, Restaurant, MenuItem, User
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -33,6 +33,14 @@ def csrf_token():
     token = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = token
     return token
+
+
+def create_user(login_session):
+    new_user = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+    session.add(new_user)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
 
 
 @app.route('/login')
