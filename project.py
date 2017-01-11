@@ -49,10 +49,7 @@ def get_user_info(user_id):
 
 def get_user_id(email):
     user = session.query(User).filter_by(email=email).first()
-    if user:
-        return user.id
-    else:
-        return None
+    return user.id if user else None
 
 
 @app.route('/login')
