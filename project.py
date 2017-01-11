@@ -41,7 +41,7 @@ def show_login():
 
 
 @app.route('/gconnect', methods=['POST'])
-def google_callback():
+def gconnect():
     # Check CSRF token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter value!'), 401)
