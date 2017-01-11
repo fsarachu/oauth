@@ -1,10 +1,7 @@
 {% extends "_main.html" %}
 {% block content %}
-    {% include "_header.html" %}
     <h2> Are you sure you want to delete {{ restaurant.name }}? </h2>
-
     <form action="#" method='post'>
-
         <button type="submit" class="btn btn-custom btn-default delete" id="submit" type="submit">
             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete
         </button>
@@ -13,7 +10,5 @@
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
             </button>
         </a>
-
     </form>
-
 {% endblock %}

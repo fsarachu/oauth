@@ -1,34 +1,14 @@
 {% extends "_main.html" %}
 
 {% block content %}
-    {% include "_header.html" %}
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="alert alert-danger">
-                        <ul class=flashes>
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endwith %}
-
     <div class="row">
         <div class="col-xs-12 col-md-4 col-md-offset-4 text-center">
             <div class="alert hidden" id="result"></div>
         </div>
     </div>
-
     <div class="row">
         <h1 class="col-xs-12 text-center">Log In</h1>
     </div>
-
     <div class="row">
         <div class="col-xs-12 text-center">
             <a id="google-login" class="btn btn-social btn-google">

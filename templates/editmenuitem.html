@@ -1,6 +1,5 @@
 {% extends "_main.html" %}
 {% block content %}
-    {% include "_header.html" %}
     <div class="row divider green">
         <div class="col-md-12"></div>
     </div>
@@ -15,11 +14,9 @@
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" maxlength="100" class="form-control" name="name" value="{{ item.name }}">
-
                     <label for="description">Description:</label>
                     <textarea class="form-control" maxlength="250" rows="3"
                               name="description">{{ item.description }}</textarea>
-
                     <label for="price">Price:</label>
                     <div class="input-group">
                         <div class="input-group-addon">$</div>
