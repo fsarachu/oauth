@@ -1,16 +1,17 @@
+import json
 import os
 import random
+import requests
 import string
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
+import httplib2
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, make_response
 from flask import session as login_session
-from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2
-import json
-import requests
+from oauth2client.client import flow_from_clientsecrets
+
 from database_setup import Base, Restaurant, MenuItem, User
 
 app = Flask(__name__)
@@ -198,8 +199,7 @@ def showRestaurants():
     restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
 
     if logged_in():
-        return render_template('restaurants.html', restaurants=restaurants,
-                               logged_in=logged_in())
+        return render_template('restaurants.html', restaurants=restaurants, logged_in=logged_in())
     else:
         return render_template('publicRestaurants.html', restaurants=restaurants, logged_in=logged_in())
 
@@ -227,6 +227,7 @@ def editRestaurant(restaurant_id):
         return redirect(url_for('show_login'))
 
     editedRestaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if request.method == 'POST':
         if request.form['name']:
             editedRestaurant.name = request.form['name']
@@ -242,7 +243,9 @@ def editRestaurant(restaurant_id):
 def deleteRestaurant(restaurant_id):
     if not logged_in():
         return redirect(url_for('show_login'))
+
     restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if request.method == 'POST':
         session.delete(restaurantToDelete)
         flash('{} Successfully Deleted'.format(restaurantToDelete.name), category='success')
@@ -271,7 +274,9 @@ def showMenu(restaurant_id):
 def newMenuItem(restaurant_id):
     if not logged_in():
         return redirect(url_for('show_login'))
+
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if request.method == 'POST':
         newItem = MenuItem(name=request.form['name'], description=request.form['description'],
                            price=request.form['price'], course=request.form['course'],
@@ -290,8 +295,10 @@ def newMenuItem(restaurant_id):
 def editMenuItem(restaurant_id, menu_id):
     if not logged_in():
         return redirect(url_for('show_login'))
+
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -315,8 +322,10 @@ def editMenuItem(restaurant_id, menu_id):
 def deleteMenuItem(restaurant_id, menu_id):
     if not logged_in():
         return redirect(url_for('show_login'))
+
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
