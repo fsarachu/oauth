@@ -155,6 +155,7 @@ def gdisconnect():
 
     if result['status'] == '200':
         # Destroy user session
+        del login_session['user_id']
         del login_session['credentials']
         del login_session['username']
         del login_session['gplus_id']
