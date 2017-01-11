@@ -258,8 +258,11 @@ def deleteRestaurant(restaurant_id):
 def showMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
-    return render_template('menu.html', items=items, restaurant=restaurant,
-                           logged_in=is_logged_in())
+
+    if is_logged_in():
+        return render_template('menu.html', items=items, restaurant=restaurant, logged_in=is_logged_in())
+    else:
+        return render_template('publicMenu.html', items=items, restaurant=restaurant, logged_in=is_logged_in())
 
 
 # Create a new menu item
