@@ -83,7 +83,6 @@ def google_callback():
     client_id = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
     if result['issued_to'] != client_id:
         response = make_response(json.dumps('Token\'s client id doesn\'t match app\'s'), 401)
-        print 'Token\'s client id doesn\'t match app\'s'
         response.headers['Content-Type'] = 'application/json'
         return response
 
