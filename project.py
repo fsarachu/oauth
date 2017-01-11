@@ -48,13 +48,13 @@ def get_user_id(email):
     return user.id if user else None
 
 
-def is_logged_in():
+def logged_in():
     return True if login_session.get('user_id') else False
 
 
 @app.route('/login')
 def show_login():
-    return render_template("login.html", state=csrf_token(), logged_in=is_logged_in())
+    return render_template("login.html", state=csrf_token(), logged_in=logged_in())
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -197,19 +197,19 @@ def restaurantsJSON():
 def showRestaurants():
     restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
 
-    if login_session.get('user_id'):
+    if logged_in():
         return render_template('restaurants.html', restaurants=restaurants,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
     else:
-        return render_template('publicRestaurants.html', restaurants=restaurants,
-                               logged_in=is_logged_in())
+        return render_template('publicRestaurants.html', restaurants=restaurants, logged_in=logged_in())
 
 
 # Create a new restaurant
 @app.route('/restaurant/new/', methods=['GET', 'POST'])
 def newRestaurant():
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
+
     if request.method == 'POST':
         newRestaurant = Restaurant(name=request.form['name'], user_id=login_session['user_id'])
         session.add(newRestaurant)
@@ -217,14 +217,15 @@ def newRestaurant():
         session.commit()
         return redirect(url_for('showRestaurants'))
     else:
-        return render_template('newRestaurant.html', logged_in=is_logged_in())
+        return render_template('newRestaurant.html', logged_in=logged_in())
 
 
 # Edit a restaurant
 @app.route('/restaurant/<int:restaurant_id>/edit/', methods=['GET', 'POST'])
 def editRestaurant(restaurant_id):
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
+
     editedRestaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -233,13 +234,13 @@ def editRestaurant(restaurant_id):
             return redirect(url_for('showRestaurants'))
     else:
         return render_template('editRestaurant.html', restaurant=editedRestaurant,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
 
 
 # Delete a restaurant
 @app.route('/restaurant/<int:restaurant_id>/delete/', methods=['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
     restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
@@ -249,7 +250,7 @@ def deleteRestaurant(restaurant_id):
         return redirect(url_for('showRestaurants', restaurant_id=restaurant_id))
     else:
         return render_template('deleteRestaurant.html', restaurant=restaurantToDelete,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
 
 
 # Show a restaurant menu
@@ -259,16 +260,16 @@ def showMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
 
-    if is_logged_in():
-        return render_template('menu.html', items=items, restaurant=restaurant, logged_in=is_logged_in())
+    if logged_in():
+        return render_template('menu.html', items=items, restaurant=restaurant, logged_in=logged_in())
     else:
-        return render_template('publicMenu.html', items=items, restaurant=restaurant, logged_in=is_logged_in())
+        return render_template('publicMenu.html', items=items, restaurant=restaurant, logged_in=logged_in())
 
 
 # Create a new menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
@@ -281,13 +282,13 @@ def newMenuItem(restaurant_id):
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
         return render_template('newmenuitem.html', restaurant_id=restaurant_id,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
 
 
 # Edit a menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET', 'POST'])
 def editMenuItem(restaurant_id, menu_id):
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -306,13 +307,13 @@ def editMenuItem(restaurant_id, menu_id):
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
         return render_template('editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
 
 
 # Delete a menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods=['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
-    if login_session.get('username') is None:
+    if not logged_in():
         return redirect('/login')
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -323,7 +324,7 @@ def deleteMenuItem(restaurant_id, menu_id):
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
         return render_template('deleteMenuItem.html', item=itemToDelete,
-                               logged_in=is_logged_in())
+                               logged_in=logged_in())
 
 
 if __name__ == '__main__':
