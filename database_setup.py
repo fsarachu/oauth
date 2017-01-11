@@ -63,6 +63,8 @@ class MenuItem(Base):
     course = Column(String(250))
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
+    creator_id = Column(Integer, ForeignKey('user.id'))
+    creator = relationship(User)
 
     @property
     def serialize(self):
