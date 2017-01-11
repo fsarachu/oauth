@@ -115,6 +115,11 @@ def gconnect():
     return response
 
 
+@app.route('/gdisconnect')
+def gdisconnect():
+    pass
+
+
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
