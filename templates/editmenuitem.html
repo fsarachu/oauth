@@ -50,10 +50,9 @@
                     <button type="submit" class="btn-custom btn-default" id="submit" type="submit">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save
                     </button>
-                    <a href='{{ url_for('showRestaurants') }}'>
-                        <button class="btn-custom btn-default delete">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
-                        </button>
+                    <a href="{{ url_for('showMenu', restaurant_id=item.restaurant_id) }}"
+                       class="btn btn-custom btn-default delete">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
                     </a>
                 </div>
             </form>
