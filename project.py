@@ -347,7 +347,7 @@ def editMenuItem(restaurant_id, menu_id):
         flash('Menu Item Successfully Edited', category='success')
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
-        return render_template('editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem,
+        return render_template('editMenuItem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem,
                                logged_in=logged_in())
 
 
