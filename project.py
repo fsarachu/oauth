@@ -146,6 +146,15 @@ def gconnect():
     return response
 
 
+@app.route('/fbconnect', methods=['POST'])
+def fbconnect():
+    # Check CSRF token
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter value!'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 @app.route('/logout')
 def logout():
     if not logged_in():
