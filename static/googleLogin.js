@@ -27,6 +27,7 @@ $(function () {
                         $result.removeClass("hidden");
 
                         if (result) {
+                            // TODO: if it has other alert-* class applied, remove it
                             $result.addClass("alert-success").text("Login Successful! Redirecting...");
                             setTimeout(function () {
                                 window.location.replace("http://localhost:5000/");
