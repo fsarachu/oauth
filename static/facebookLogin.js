@@ -1,7 +1,7 @@
 /* Load SDK asynchronously */
 window.fbAsyncInit = function () {
     FB.init({
-        appId: 'your-app-id',
+        appId: '***FB_APP_ID***',
         xfbml: true,
         version: 'v2.8'
     });
