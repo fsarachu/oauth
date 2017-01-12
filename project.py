@@ -147,6 +147,15 @@ def gconnect():
     return response
 
 
+@app.route('/logout')
+def logout():
+    if not logged_in():
+        flash('Please first log in', category='info')
+        return redirect(url_for('show_login'))
+
+    return redirect(url_for('gdisconnect'))
+
+
 @app.route('/gdisconnect')
 def gdisconnect():
     # Check if user is connected
