@@ -3,6 +3,10 @@
     font-weight: 700;
 }
 
+body {
+    background-color: #F1F1F1;
+}
+
 h1 {
     font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
     font-size: 50px;
@@ -82,6 +86,13 @@ a {
 .btn-custom.delete:hover {
     border-color: #aaaaaa;
     color: red;
+}
+
+.btn-social {
+    margin: 1rem auto;
+    font-weight: bold;
+    text-align: center;
+    max-width: 200px;
 }
 
 .glyphicon {
@@ -188,4 +199,15 @@ a {
     list-style-type: none;
     text-align: center;
 
+}
+
+.login-form {
+    padding: 50px 20px 70px;
+    /*border: 1px solid #FAFAFA;*/
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.login-form h1 {
+    margin-bottom: 4rem;
 }
