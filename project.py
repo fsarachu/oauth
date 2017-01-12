@@ -56,6 +56,10 @@ def logged_in():
 
 @app.route('/login')
 def show_login():
+    if logged_in():
+        flash('You are already logged in!', category='info')
+        return redirect(url_for('showRestaurants'))
+
     return render_template("login.html", state=csrf_token(), logged_in=logged_in())
 
 
