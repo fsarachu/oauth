@@ -1,4 +1,3 @@
-# TODO: Restrict CRUD access to only creators of the restaurant
 import json
 import os
 import random
@@ -150,7 +149,7 @@ def gconnect():
 @app.route('/logout')
 def logout():
     if not logged_in():
-        flash('Please first log in', category='info')
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     return redirect(url_for('gdisconnect'))
@@ -222,6 +221,7 @@ def showRestaurants():
 @app.route('/restaurant/new/', methods=['GET', 'POST'])
 def newRestaurant():
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     if request.method == 'POST':
@@ -238,9 +238,14 @@ def newRestaurant():
 @app.route('/restaurant/<int:restaurant_id>/edit/', methods=['GET', 'POST'])
 def editRestaurant(restaurant_id):
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     editedRestaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
+    if editedRestaurant.creator_id != login_session['user_id']:
+        flash("You must be the creator of this restaurant", category='error')
+        return redirect(url_for('showMenu', restaurant_id=restaurant_id))
 
     if request.method == 'POST':
         if request.form['name']:
@@ -256,9 +261,14 @@ def editRestaurant(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/delete/', methods=['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
+    if restaurantToDelete.creator_id != login_session['user_id']:
+        flash("You must be the creator of this restaurant", category='error')
+        return redirect(url_for('showMenu', restaurant_id=restaurant_id))
 
     if request.method == 'POST':
         session.delete(restaurantToDelete)
@@ -277,19 +287,24 @@ def showMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
 
-    if logged_in():
-        return render_template('menu.html', items=items, restaurant=restaurant, logged_in=logged_in())
-    else:
+    if not logged_in() or restaurant.creator_id != login_session['user_id']:
         return render_template('publicMenu.html', items=items, restaurant=restaurant, logged_in=logged_in())
+
+    return render_template('menu.html', items=items, restaurant=restaurant, logged_in=logged_in())
 
 
 # Create a new menu item
 @app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
+    if restaurant.creator_id != login_session['user_id']:
+        flash("You must be the creator of this restaurant", category='error')
+        return redirect(url_for('showMenu', restaurant_id=restaurant_id))
 
     if request.method == 'POST':
         newItem = MenuItem(name=request.form['name'], description=request.form['description'],
@@ -308,10 +323,15 @@ def newMenuItem(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET', 'POST'])
 def editMenuItem(restaurant_id, menu_id):
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
+    if restaurant.creator_id != login_session['user_id']:
+        flash("You must be the creator of this restaurant", category='error')
+        return redirect(url_for('showMenu', restaurant_id=restaurant_id))
 
     if request.method == 'POST':
         if request.form['name']:
@@ -335,10 +355,15 @@ def editMenuItem(restaurant_id, menu_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods=['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
     if not logged_in():
+        flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+
+    if restaurant.creator_id != login_session['user_id']:
+        flash("You must be the creator of this restaurant", category='error')
+        return redirect(url_for('showMenu', restaurant_id=restaurant_id))
 
     if request.method == 'POST':
         session.delete(itemToDelete)
