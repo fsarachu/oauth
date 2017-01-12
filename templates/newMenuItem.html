@@ -48,6 +48,10 @@
                     <button type="submit" class="btn btn-custom btn-default" id="submit" type="submit">
                         <span class="glyphicon glyphicon-glass" aria-hidden="true"></span>Create
                     </button>
+                    <a href="{{ url_for('showMenu', restaurant_id=restaurant_id) }}"
+                       class="btn btn-custom btn-default delete">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+                    </a>
                 </div>
             </form>
         </div>

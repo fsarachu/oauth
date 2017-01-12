@@ -315,7 +315,7 @@ def newMenuItem(restaurant_id):
         flash('New Menu {} Item Successfully Created'.format(newItem.name), category='success')
         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
     else:
-        return render_template('newmenuitem.html', restaurant_id=restaurant_id,
+        return render_template('newMenuItem.html', restaurant_id=restaurant_id,
                                logged_in=logged_in())
 
 
