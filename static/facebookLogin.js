@@ -1,4 +1,3 @@
-/* Load SDK asynchronously */
 window.fbAsyncInit = function () {
     FB.init({
         appId: '***FB_APP_ID***',
@@ -7,11 +6,25 @@ window.fbAsyncInit = function () {
     });
     FB.AppEvents.logPageView();
 
-    FB.getLoginStatus(function (response) {
-        statusChangeCallback(response);
+    $("#facebook-login").on("click", function () {
+        FB.login(function (response) {
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook.
+            } else if (response.status === 'not_authorized') {
+                var $result = $("#result");
+                $result.removeClass("hidden");
+                $result.addClass("alert-danger").text("Failed to log in!");
+            } else {
+                var $result = $("#result");
+                $result.removeClass("hidden");
+                $result.addClass("alert-danger").text("Failed to log in!");
+            }
+        }, {scope: 'email, public_profile'});
     });
+
 };
 
+/* Load SDK asynchronously */
 (function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {
@@ -22,7 +35,3 @@ window.fbAsyncInit = function () {
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-
-function statusChangeCallback(response) {
-    console.log(response);
-}
