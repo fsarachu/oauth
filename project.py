@@ -157,15 +157,27 @@ def fbconnect():
 
 @app.route('/logout')
 def logout():
+    """ Finishes local user session """
     if not logged_in():
         flash('Please, first log in.', category='error')
         return redirect(url_for('show_login'))
 
-    return redirect(url_for('gdisconnect'))
+    # Destroy user session
+    del login_session['user_id']
+    del login_session['credentials']
+    del login_session['username']
+    del login_session['gplus_id']
+    del login_session['picture']
+    del login_session['email']
+
+    flash('Succcessfully logged out!', category='success')
+    return redirect(url_for('showRestaurants'))
 
 
 @app.route('/gdisconnect')
 def gdisconnect():
+    """ Disconnects a google account from a logged in local user account """
+
     # Check if user is connected
     if not login_session.get('credentials'):
         flash('User is not connected.', category='error')
@@ -180,13 +192,6 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
 
     if result['status'] == '200':
-        # Destroy user session
-        del login_session['user_id']
-        del login_session['credentials']
-        del login_session['username']
-        del login_session['gplus_id']
-        del login_session['picture']
-        del login_session['email']
         flash('Succcessfully disconnected', category='success')
         return redirect(url_for('showRestaurants'))
     else:
