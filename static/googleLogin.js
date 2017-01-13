@@ -26,8 +26,12 @@ $(function () {
 
                         $result.removeClass("hidden");
 
+                        // If it has other alert-* class applied, remove it
+                        $result.removeClass(function (index, className) {
+                            return (className.match(/(^|\s)alert-\S+/g) || []).join(' ');
+                        });
+
                         if (result) {
-                            // TODO: if it has other alert-* class applied, remove it
                             $result.addClass("alert-success").text("Login Successful! Redirecting...");
                             setTimeout(function () {
                                 window.location.replace("http://localhost:5000/");
