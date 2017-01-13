@@ -8,14 +8,13 @@ window.fbAsyncInit = function () {
 
     $("#facebook-login").on("click", function () {
         FB.login(function (response) {
+            var $result = $("#result");
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
             } else if (response.status === 'not_authorized') {
-                var $result = $("#result");
                 $result.removeClass("hidden");
                 $result.addClass("alert-danger").text("Failed to log in!");
             } else {
-                var $result = $("#result");
                 $result.removeClass("hidden");
                 $result.addClass("alert-danger").text("Failed to log in!");
             }
