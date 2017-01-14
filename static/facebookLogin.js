@@ -24,20 +24,21 @@ window.fbAsyncInit = function () {
                     dataType: "application/octet-stream; charset=utf-8"
                 })
                     .done(function () {
-                        $result.addClass("alert-success").text("Login Successful! Redirecting...");
                         $result.removeClass("hidden");
+                        $result.addClass("alert-success").text("Login Successful! Redirecting...");
                         setTimeout(function () {
                             window.location.replace("http://localhost:5000/");
                         }, 3000);
                     })
                     .fail(function (result) {
                             var $result = $("#result");
-                            $result.addClass("alert-danger").text("Failed to log in!");
                             $result.removeClass("hidden");
+                            $result.addClass("alert-danger").text("Failed to log in!");
                         }
                     );
             } else {
-                $result.addClass("alert-danger").text("User cancelled login or did not fully authorize.");
+                $result.removeClass("hidden");
+                $result.addClass("alert-danger").text("You cancelled login or did not fully authorize.");
             }
         }, {scope: 'email, public_profile'});
     });
