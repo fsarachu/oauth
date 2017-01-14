@@ -116,7 +116,7 @@ def gconnect():
     stored_gplus_id = login_session.get('social_id')
     if stored_credentials is not None and stored_gplus_id == gplus_id:
         response = make_response(json.dumps('Current user is already logged in', 200))
-    response.headers['Content-Type'] = 'application/json'
+        response.headers['Content-Type'] = 'application/json'
 
     # Store credentials for later use
     login_session['credentials'] = credentials.to_json()
