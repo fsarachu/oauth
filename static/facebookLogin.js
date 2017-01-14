@@ -10,18 +10,18 @@ window.fbAsyncInit = function () {
     $("#facebook-login").on("click", function () {
         FB.login(function (response) {
             var $result = $("#result");
+
             $result.removeClass(function (index, className) {
                 return (className.match(/(^|\s)alert-\S+/g) || []).join(' ');
             });
 
             if (response.authResponse) {
-                var accessToken = response.authResponse.accessToken;
                 $.ajax({
                     type: "POST",
                     url: "/fbconnect?state=" + state,
                     processData: false,
-                    data: accessToken,
-                    dataType: "application/octet-stream; charset=utf-8"
+                    data: response.authResponse.accessToken,
+                    contentType: "application/octet-stream; charset=utf-8"
                 })
                     .done(function () {
                         $result.removeClass("hidden");
