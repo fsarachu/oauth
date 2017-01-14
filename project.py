@@ -129,6 +129,7 @@ def gconnect():
     data = json.loads(answer.text)
 
     # Store user info
+    login_session['provider'] = 'google'
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
