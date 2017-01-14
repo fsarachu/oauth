@@ -253,7 +253,7 @@ def gdisconnect():
     """ Disconnects a google account from a logged in local user account """
 
     # Check if user is connected
-    if not login_session.get('credentials'):
+    if login_session.get('provider') != 'google':
         flash('User is not connected.', category='error')
         return redirect(url_for('showRestaurants'))
 
