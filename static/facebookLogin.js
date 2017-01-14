@@ -1,6 +1,7 @@
 window.fbAsyncInit = function () {
     FB.init({
         appId: '***FB_APP_ID***',
+        cookie: true,
         xfbml: true,
         version: 'v2.8'
     });
@@ -9,18 +10,37 @@ window.fbAsyncInit = function () {
     $("#facebook-login").on("click", function () {
         FB.login(function (response) {
             var $result = $("#result");
-            if (response.status === 'connected') {
-                // Logged into your app and Facebook.
-            } else if (response.status === 'not_authorized') {
-                $result.removeClass("hidden");
-                $result.addClass("alert-danger").text("Failed to log in!");
+            $result.removeClass(function (index, className) {
+                return (className.match(/(^|\s)alert-\S+/g) || []).join(' ');
+            });
+
+            if (response.authResponse) {
+                var accessToken = response.authResponse.accessToken;
+                $.ajax({
+                    type: "POST",
+                    url: "/fbconnect?state=" + state,
+                    processData: false,
+                    data: accessToken,
+                    dataType: "application/octet-stream; charset=utf-8"
+                })
+                    .done(function () {
+                        $result.addClass("alert-success").text("Login Successful! Redirecting...");
+                        $result.removeClass("hidden");
+                        setTimeout(function () {
+                            window.location.replace("http://localhost:5000/");
+                        }, 3000);
+                    })
+                    .fail(function (result) {
+                            var $result = $("#result");
+                            $result.addClass("alert-danger").text("Failed to log in!");
+                            $result.removeClass("hidden");
+                        }
+                    );
             } else {
-                $result.removeClass("hidden");
-                $result.addClass("alert-danger").text("Failed to log in!");
+                $result.addClass("alert-danger").text("User cancelled login or did not fully authorize.");
             }
         }, {scope: 'email, public_profile'});
     });
-
 };
 
 /* Load SDK asynchronously */
