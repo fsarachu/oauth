@@ -273,6 +273,24 @@ def gdisconnect():
         return redirect(url_for('showRestaurants'))
 
 
+@app.route('/fbdisconnect')
+def fbdisconnect():
+    # TODO: implement this thing
+    pass
+    # """ Disconnects a facebook account from a logged in local user account """
+    #
+    # # Check if user is connected
+    # if login_session.get('provider') != 'facebook':
+    #     flash('User is not connected.', category='error')
+    #     return redirect(url_for('showRestaurants'))
+    #
+    # # Disconnect user
+    # facebook_id = login_session['social_id']
+    # url = 'https://graph.facebook.com/{}/permissions'.format(facebook_id)
+    # h = httplib2.Http()
+    # result = h.request(url, 'DELETE')
+
+
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
