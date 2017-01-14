@@ -113,14 +113,14 @@ def gconnect():
 
     # Check to see if user is already logged in
     stored_credentials = login_session.get('credentials')
-    stored_gplus_id = login_session.get('gplus_id')
+    stored_gplus_id = login_session.get('social_id')
     if stored_credentials is not None and stored_gplus_id == gplus_id:
         response = make_response(json.dumps('Current user is already logged in', 200))
-        response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Type'] = 'application/json'
 
     # Store credentials for later use
     login_session['credentials'] = credentials.to_json()
-    login_session['gplus_id'] = gplus_id
+    login_session['social_id'] = gplus_id
 
     # Get user info
     userinfo_url = 'https://www.googleapis.com/oauth2/v2/userinfo'
@@ -206,7 +206,7 @@ def fbconnect():
     # Setup local session
     print data
     login_session['provider'] = 'facebook'
-    login_session['facebook_id'] = data.get('id')
+    login_session['social_id'] = data.get('id')
     login_session['username'] = data.get('name')
     login_session['email'] = data.get('email')
     login_session['picture'] = data.get('picture')
@@ -239,7 +239,7 @@ def logout():
     del login_session['user_id']
     del login_session['credentials']
     del login_session['username']
-    del login_session['gplus_id']
+    del login_session['social_id']
     del login_session['picture']
     del login_session['email']
 
