@@ -154,6 +154,64 @@ def fbconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    # Get client access token
+    short_lived_token = request.data
+    print 'Short Lived Token: {}'.format(short_lived_token)
+
+    # Get app credentials
+    fb_client_secrets = json.loads(open('fb_client_secrets.json', 'r').read())
+    app_id = fb_client_secrets['web']['app_id']
+    app_secret = fb_client_secrets['web']['app_secret']
+
+    # Build token extension url
+    url = 'https://graph.facebook.com/oauth/access_token?' \
+          'grant_type=fb_exchange_token' \
+          '&client_id={app_id}' \
+          '&client_secret={app_secret}' \
+          '&fb_exchange_token={short_lived_token}' \
+        .format(app_id=app_id, app_secret=app_secret, short_lived_token=short_lived_token)
+
+    # Request long-lived token
+    print 'Request URL: {}'.format(url)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+
+    # Strip expire tag and save token
+    print 'Result: {}'.format(result)
+    long_lived_token = result.split("&")[0]
+    print 'Long Lived Token: {}'.format(long_lived_token)
+
+    # # Store credentials
+    # login_session['credentials'] = {short_lived_token: short_lived_token, long_lived_token: long_lived_token}
+    #
+    # # Get user profile
+    # url = 'https://graph.facebook.com/v2.8/me?'
+    #
+    # # Setup local session
+    # login_session['provider'] = 'facebook'
+    # login_session['username'] = result_json['name']
+    # login_session['email'] = result_json['email']
+    # login_session['facebook_id'] = result_json['id']
+    #
+    # # Check if user already exists
+    # user_id = get_user_id(login_session['email'])
+    # if not user_id:
+    #     user_id = create_user(login_session)
+    #
+    # # Store user id
+    # login_session['user_id'] = user_id
+    #
+    # flash('Logged in as {}'.format(login_session['username']), category='success')
+    #
+    # response = make_response(json.dumps('Welcome {}'.format(login_session['username']), 200))
+    # response.headers['Content-Type'] = 'application/json'
+    #
+    # return response
+    response = make_response(json.dumps('Fucking it up on purpose', 500))
+    response.headers['Content-Type'] = 'application/json'
+
+    return response
+
 
 @app.route('/logout')
 def logout():
