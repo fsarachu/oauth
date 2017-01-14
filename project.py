@@ -178,7 +178,7 @@ def fbconnect():
 
     # Strip expire tag and save token
     print 'Result: {}'.format(result)
-    long_lived_token = result.split("&")[0]
+    long_lived_token = result.split("&")[0].split("=")[1]
     print 'Long Lived Token: {}'.format(long_lived_token)
 
     # # Store credentials
