@@ -181,33 +181,45 @@ def fbconnect():
     long_lived_token = result.split("&")[0].split("=")[1]
     print 'Long Lived Token: {}'.format(long_lived_token)
 
-    # # Store credentials
-    # login_session['credentials'] = {short_lived_token: short_lived_token, long_lived_token: long_lived_token}
-    #
-    # # Get user profile
-    # url = 'https://graph.facebook.com/v2.8/me?'
-    #
-    # # Setup local session
-    # login_session['provider'] = 'facebook'
-    # login_session['username'] = result_json['name']
-    # login_session['email'] = result_json['email']
-    # login_session['facebook_id'] = result_json['id']
-    #
-    # # Check if user already exists
-    # user_id = get_user_id(login_session['email'])
-    # if not user_id:
-    #     user_id = create_user(login_session)
-    #
-    # # Store user id
-    # login_session['user_id'] = user_id
-    #
-    # flash('Logged in as {}'.format(login_session['username']), category='success')
-    #
-    # response = make_response(json.dumps('Welcome {}'.format(login_session['username']), 200))
-    # response.headers['Content-Type'] = 'application/json'
-    #
-    # return response
-    response = make_response(json.dumps('Fucking it up on purpose', 500))
+    # Store credentials
+    login_session['credentials'] = {
+        short_lived_token: short_lived_token,
+        long_lived_token: long_lived_token
+    }
+
+    # Get user info
+    url = 'https://graph.facebook.com/v2.8/me?access_token={}'.format(long_lived_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    data = json.loads(result)
+
+    # Get user picture
+    url = 'https://graph.facebook.com/v2.8/me/picture?access_token={}&redirect=false&height=200&width=200'.format(
+        long_lived_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    data['picture'] = json.loads(result)['data']['url']
+
+    # Setup local session
+    print data
+    login_session['provider'] = 'facebook'
+    login_session['facebook_id'] = data.get('id')
+    login_session['username'] = data.get('name')
+    login_session['email'] = data.get('email')
+    login_session['picture'] = data.get('picture')
+
+    # Check if user already exists
+    user_id = get_user_id(login_session['email'])
+    if not user_id:
+        user_id = create_user(login_session)
+
+    # Store user id
+    login_session['user_id'] = user_id
+
+    # Make and send response
+    flash('Logged in as {}'.format(login_session['username']), category='success')
+
+    response = make_response(json.dumps('Welcome {}'.format(login_session['username']), 200))
     response.headers['Content-Type'] = 'application/json'
 
     return response
