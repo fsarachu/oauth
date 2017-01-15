@@ -236,8 +236,8 @@ def fbconnect():
     return response
 
 
-@app.route('/logout')
-def logout():
+@app.route('/disconnect')
+def disconnect():
     """ Finishes local user session """
     if not logged_in():
         flash('Please, first log in.', category='error')
