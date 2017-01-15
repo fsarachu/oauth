@@ -63,6 +63,23 @@ def login_session_start(user_id, username, email, picture, provider=None, creden
     login_session['social_id'] = social_id
 
 
+def login_session_end():
+    if login_session.get('user_id'):
+        del login_session['user_id']
+    if login_session.get('username'):
+        del login_session['username']
+    if login_session.get('email'):
+        del login_session['email']
+    if login_session.get('picture'):
+        del login_session['picture']
+    if login_session.get('provider'):
+        del login_session['provider']
+    if login_session.get('credentials'):
+        del login_session['credentials']
+    if login_session.get('social_id'):
+        del login_session['social_id']
+
+
 @app.route('/login')
 def show_login():
     if logged_in():
