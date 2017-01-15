@@ -142,30 +142,21 @@ def gconnect():
         response = make_response(json.dumps('Current user is already logged in', 200))
         response.headers['Content-Type'] = 'application/json'
 
-    # Store credentials for later use
-    login_session['credentials'] = {'access_token': credentials.access_token,
-                                    'refresh_token': credentials.refresh_token}
-    login_session['social_id'] = gplus_id
-
     # Get user info
     userinfo_url = 'https://www.googleapis.com/oauth2/v2/userinfo'
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
-    # Store user info
-    login_session['provider'] = 'google'
-    login_session['username'] = data['name']
-    login_session['picture'] = data['picture']
-    login_session['email'] = data['email']
-
     # Check if user already exists
-    user_id = get_user_id(login_session['email'])
+    user_id = get_user_id(data['email'])
     if not user_id:
         user_id = create_user(login_session)
 
-    # Store user id
-    login_session['user_id'] = user_id
+    # Start user session
+    login_session_start(user_id=user_id, username=data['name'], email=data['email'], picture=data['picture'],
+                        provider='google', social_id=gplus_id, credentials={'access_token': credentials.access_token,
+                                                                            'refresh_token': credentials.refresh_token})
 
     flash('Logged in as {}'.format(login_session['username']), category='success')
 
