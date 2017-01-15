@@ -190,7 +190,8 @@ def fbconnect():
     login_session['credentials'] = {'access_token': long_lived_token}
 
     # Get user info
-    url = 'https://graph.facebook.com/v2.8/me?access_token={}'.format(long_lived_token)
+    url = 'https://graph.facebook.com/v2.8/me?access_token={}&fields=name,id,email'.format(
+        login_session['credentials']['access_token'])
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
