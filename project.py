@@ -32,11 +32,11 @@ def csrf_token():
     return token
 
 
-def create_user(login_session):
-    new_user = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+def create_user(name, email, picture):
+    new_user = User(name=name, email=email, picture=picture)
     session.add(new_user)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).first()
+    user = session.query(User).filter_by(email=email).first()
     return user.id
 
 
@@ -151,7 +151,7 @@ def gconnect():
     # Check if user already exists
     user_id = get_user_id(data['email'])
     if not user_id:
-        user_id = create_user(login_session)
+        user_id = create_user(data['name'], data['email'], data['picture'])
 
     # Start user session
     login_session_start(user_id=user_id, username=data['name'], email=data['email'], picture=data['picture'],
@@ -220,7 +220,7 @@ def fbconnect():
     # Check if user already exists
     user_id = get_user_id(data.get('email'))
     if not user_id:
-        user_id = create_user(login_session)
+        user_id = create_user(data['name'], data['email'], data['picture'])
 
     # Start user session
     login_session_start(user_id=user_id, username=data.get('name'), email=data.get('email'),
