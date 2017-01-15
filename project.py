@@ -53,6 +53,16 @@ def logged_in():
     return True if login_session.get('user_id') else False
 
 
+def login_session_start(user_id, username, email, picture, provider=None, credentials=None, social_id=None):
+    login_session['user_id'] = user_id
+    login_session['username'] = username
+    login_session['email'] = email
+    login_session['picture'] = picture
+    login_session['provider'] = provider
+    login_session['credentials'] = credentials
+    login_session['social_id'] = social_id
+
+
 @app.route('/login')
 def show_login():
     if logged_in():
