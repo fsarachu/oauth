@@ -158,8 +158,8 @@ def gconnect():
                         provider='google', social_id=gplus_id, credentials={'access_token': credentials.access_token,
                                                                             'refresh_token': credentials.refresh_token})
 
+    # Make and send response
     flash('Logged in as {}'.format(login_session['username']), category='success')
-
     response = make_response(json.dumps('Welcome {}'.format(login_session['username']), 200))
     response.headers['Content-Type'] = 'application/json'
 
@@ -175,8 +175,7 @@ def fbconnect():
         return response
 
     # Get client access token
-    short_lived_token = request.data
-    print 'Short Lived Token: {}'.format(short_lived_token)
+    short_life_token = request.data
 
     # Get app credentials
     fb_client_secrets = json.loads(open('fb_client_secrets.json', 'r').read())
@@ -188,51 +187,45 @@ def fbconnect():
           'grant_type=fb_exchange_token' \
           '&client_id={app_id}' \
           '&client_secret={app_secret}' \
-          '&fb_exchange_token={short_lived_token}' \
-        .format(app_id=app_id, app_secret=app_secret, short_lived_token=short_lived_token)
+          '&fb_exchange_token={short_life_token}' \
+        .format(app_id=app_id, app_secret=app_secret, short_life_token=short_life_token)
 
     # Request long-lived token
-    print 'Request URL: {}'.format(url)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
     # Strip expire tag and save token
-    print 'Result: {}'.format(result)
-    long_lived_token = result.split("&")[0].split("=")[1]
-    print 'Long Lived Token: {}'.format(long_lived_token)
-
-    # Store credentials
-    login_session['credentials'] = {'access_token': long_lived_token}
+    long_life_token = result.split("&")[0].split("=")[1]
 
     # Get user info
-    url = 'https://graph.facebook.com/v2.8/me?access_token={}&fields=name,id,email'.format(
-        login_session['credentials']['access_token'])
+    url = 'https://graph.facebook.com/v2.8/me?access_token={}&fields=name,id,email'.format(long_life_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
 
+    # Check if got email
+    if not data.get('email'):
+        flash('Failed to log in! Your Facebook account has no email address available.')
+        response = make_response(json.dumps("Email address required.", 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     # Get user picture
     url = 'https://graph.facebook.com/v2.8/me/picture?access_token={}&redirect=false&height=200&width=200'.format(
-        long_lived_token)
+        long_life_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data['picture'] = json.loads(result)['data']['url']
 
-    # Setup local session
-    print data
-    login_session['provider'] = 'facebook'
-    login_session['social_id'] = data.get('id')
-    login_session['username'] = data.get('name')
-    login_session['email'] = data.get('email')
-    login_session['picture'] = data.get('picture')
-
     # Check if user already exists
-    user_id = get_user_id(login_session['email'])
+    user_id = get_user_id(data.get('email'))
     if not user_id:
         user_id = create_user(login_session)
 
-    # Store user id
-    login_session['user_id'] = user_id
+    # Start user session
+    login_session_start(user_id=user_id, username=data.get('name'), email=data.get('email'),
+                        picture=data.get('picture'), provider='facebook', social_id=data.get('id'),
+                        credentials={'access_token': long_life_token, 'refresh_token': None})
 
     # Make and send response
     flash('Logged in as {}'.format(login_session['username']), category='success')
