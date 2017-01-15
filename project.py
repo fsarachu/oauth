@@ -119,7 +119,8 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
 
     # Store credentials for later use
-    login_session['credentials'] = credentials.to_json()
+    login_session['credentials'] = {'access_token': credentials.access_token,
+                                    'refresh_token': credentials.refresh_token}
     login_session['social_id'] = gplus_id
 
     # Get user info
@@ -254,10 +255,8 @@ def gdisconnect():
         flash('User is not connected.', category='error')
         return redirect(url_for('showRestaurants'))
 
-    credentials = json.loads(login_session.get('credentials'))
-
     # Revoke current token
-    access_token = credentials['access_token']
+    access_token = login_session['credentials']['access_token']
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -281,8 +280,8 @@ def fbdisconnect():
 
     # Disconnect user
     facebook_id = login_session['social_id']
-    url = 'https://graph.facebook.com/{}/permissions?access_token={}'.format(facebook_id, login_session['credentials'][
-        'access_token'])
+    access_token = login_session['credentials']['access_token']
+    url = 'https://graph.facebook.com/{}/permissions?access_token={}'.format(facebook_id, access_token)
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
 
