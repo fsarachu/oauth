@@ -238,16 +238,22 @@ def fbconnect():
 
 @app.route('/disconnect')
 def disconnect():
-    """ Finishes local user session """
     if not logged_in():
-        flash('Please, first log in.', category='error')
+        flash('Please log in first.', category='error')
         return redirect(url_for('show_login'))
 
-    # Destroy user session
-    login_session_end()
+    provider = login_session.get('provider')
 
-    flash('Succcessfully logged out!', category='success')
-    return redirect(url_for('showRestaurants'))
+    if provider == 'google':
+        return redirect(url_for('gdisconnect'))
+
+    if provider == 'facebook':
+        return redirect(url_for('fbdisconnect'))
+
+    # If provider is unknown, finish the session and redirect to login page
+    login_session_end()
+    flash('Please log in first.', category='error')
+    return redirect(url_for('show_login'))
 
 
 @app.route('/gdisconnect')
@@ -265,6 +271,10 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
+    # End local session
+    login_session_end()
+
+    # Redirect with appropiate message
     if result['status'] == '200':
         flash('Succcessfully disconnected', category='success')
         return redirect(url_for('showRestaurants'))
@@ -289,6 +299,10 @@ def fbdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
 
+    # End local session
+    login_session_end()
+
+    # Redirect with appropiate message
     if result['status'] == '200':
         flash('Succcessfully disconnected', category='success')
         return redirect(url_for('showRestaurants'))
