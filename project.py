@@ -258,8 +258,6 @@ def disconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
-    """ Disconnects a google account from a logged in local user account """
-
     # Check if user is connected
     if login_session.get('provider') != 'google':
         flash('User is not connected.', category='error')
@@ -285,8 +283,6 @@ def gdisconnect():
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
-    """ Disconnects a facebook account from a logged in local user account """
-
     # Check if user is connected
     if login_session.get('provider') != 'facebook':
         flash('User is not connected.', category='error')
@@ -297,7 +293,7 @@ def fbdisconnect():
     access_token = login_session['credentials']['access_token']
     url = 'https://graph.facebook.com/{}/permissions?access_token={}'.format(facebook_id, access_token)
     h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
+    result = h.request(url, 'DELETE')[0]
 
     # End local session
     login_session_end()
