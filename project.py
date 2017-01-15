@@ -186,10 +186,7 @@ def fbconnect():
     print 'Long Lived Token: {}'.format(long_lived_token)
 
     # Store credentials
-    login_session['credentials'] = {
-        short_lived_token: short_lived_token,
-        long_lived_token: long_lived_token
-    }
+    login_session['credentials'] = {'access_token': long_lived_token}
 
     # Get user info
     url = 'https://graph.facebook.com/v2.8/me?access_token={}'.format(long_lived_token)
@@ -275,20 +272,26 @@ def gdisconnect():
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
-    # TODO: implement this thing
-    pass
-    # """ Disconnects a facebook account from a logged in local user account """
-    #
-    # # Check if user is connected
-    # if login_session.get('provider') != 'facebook':
-    #     flash('User is not connected.', category='error')
-    #     return redirect(url_for('showRestaurants'))
-    #
-    # # Disconnect user
-    # facebook_id = login_session['social_id']
-    # url = 'https://graph.facebook.com/{}/permissions'.format(facebook_id)
-    # h = httplib2.Http()
-    # result = h.request(url, 'DELETE')
+    """ Disconnects a facebook account from a logged in local user account """
+
+    # Check if user is connected
+    if login_session.get('provider') != 'facebook':
+        flash('User is not connected.', category='error')
+        return redirect(url_for('showRestaurants'))
+
+    # Disconnect user
+    facebook_id = login_session['social_id']
+    url = 'https://graph.facebook.com/{}/permissions?access_token={}'.format(facebook_id, login_session['credentials'][
+        'access_token'])
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+
+    if result['status'] == '200':
+        flash('Succcessfully disconnected', category='success')
+        return redirect(url_for('showRestaurants'))
+    else:
+        flash('Failed to revoke token', category='error')
+        return redirect(url_for('showRestaurants'))
 
 
 # JSON APIs to view Restaurant Information
