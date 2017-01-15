@@ -244,12 +244,7 @@ def logout():
         return redirect(url_for('show_login'))
 
     # Destroy user session
-    del login_session['user_id']
-    del login_session['credentials']
-    del login_session['username']
-    del login_session['social_id']
-    del login_session['picture']
-    del login_session['email']
+    login_session_end()
 
     flash('Succcessfully logged out!', category='success')
     return redirect(url_for('showRestaurants'))
