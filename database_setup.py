@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -78,6 +79,7 @@ class MenuItem(Base):
         }
 
 
-engine = create_engine('sqlite:///restaurant_menu_with_users.db')
+db_path = os.path.join(os.path.dirname(__file__), 'restaurant_menu_with_users.db')
+engine = create_engine('sqlite:///{}'.format(db_path))
 
 Base.metadata.create_all(engine)
