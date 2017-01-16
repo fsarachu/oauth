@@ -1,5 +1,7 @@
 # OAuth2
 
+Project for Udacity's course *Authentication & Authorization: OAuth*
+
 ## Running the App
 
 ### Set up credentials
@@ -13,8 +15,8 @@ Replace Google and Facebook API credentials in the following files:
 
 ### Initialize the Database
 
-Type **python database_setup.py** to initialize the database.
+Run `python database_setup.py` to initialize the database.
 
-Type **python lotsofmenus.py** to populate the database with restaurants and menu items. (Optional)
+Run `python lotsofmenus.py` to populate the database with restaurants and menu items.
 
-Type **python project.py** to run the Flask web server. App will serve at **http://localhost:5000**
+Run `python project.py` to run the Flask web server. App will serve at `http://localhost:5000`
