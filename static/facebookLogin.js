@@ -1,9 +1,9 @@
 window.fbAsyncInit = function () {
     FB.init({
-        appId: '***FB_APP_ID***',
+        appId: facebookClientId,
         cookie: true,
         xfbml: true,
-        version: 'v2.8'
+        version: "v2.8"
     });
     FB.AppEvents.logPageView();
 
@@ -40,7 +40,7 @@ window.fbAsyncInit = function () {
                 $result.removeClass("hidden");
                 $result.addClass("alert-danger").text("You cancelled login or did not fully authorize.");
             }
-        }, {scope: 'email, public_profile'});
+        }, {scope: "email, public_profile"});
     });
 };
 
@@ -54,4 +54,4 @@ window.fbAsyncInit = function () {
     js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+}(document, "script", "facebook-jssdk"));

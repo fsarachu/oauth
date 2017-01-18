@@ -86,7 +86,14 @@ def show_login():
         flash('You are already logged in!', category='info')
         return redirect(url_for('showRestaurants'))
 
-    return render_template("login.html", state=csrf_token(), logged_in=logged_in())
+    g_client_secrets = json.loads(open('client_secrets.json', 'r').read())
+    g_client_id = g_client_secrets['web']['client_id']
+
+    fb_client_secrets = json.loads(open('fb_client_secrets.json', 'r').read())
+    fb_client_id = fb_client_secrets['web']['app_id']
+
+    return render_template("login.html", state=csrf_token(), logged_in=logged_in(), g_client_id=g_client_id,
+                           fb_client_id=fb_client_id)
 
 
 @app.route('/gconnect', methods=['POST'])

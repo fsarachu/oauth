@@ -36,6 +36,8 @@
 {% block page_scripts %}
     <script>
         var state = "{{ state }}";
+        var googleClientId = "{{ g_client_id }}"
+        var facebookClientId = "{{ fb_client_id }}"
     </script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="{{ url_for('static', filename='googleLogin.js') }}"></script>
