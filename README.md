@@ -10,8 +10,6 @@ Replace Google and Facebook API credentials in the following files:
 
 * `client_secrets.json`
 * `fb_client_secrets.json`
-* `static/facebookLogin.js`
-* `static/googleLogin.js`
 
 ### Initialize the Database
 
